@@ -5,32 +5,30 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-// So we learned about stateful widgets, the other type of widget you can create in Flutter which differs
-// from the stateless widget in that it can manage internal data.
-// Well you could do that in a stateless widget too, you can do that in any Dart class after all
-// but in a stateful widget if you manage that internal data actually in a state object then which is connected
-// to the stateful widget, you can update this in a way that it's picked up by Flutter and that UI also
-// updates.
   @override
   State<StatefulWidget> createState() {
     // createState returns State Object
     // TODO: implement createState
-    return MyAppState();
+    return _MyAppState();
   }
 }
+
 // State widget cannot be re-built
 // First of all, state is a generic type so we should add angled brackets there and in between, we add a pointer
 // at our class here,
-class MyAppState extends State<MyApp> {
-  var questionIndex = 0;
-  void answerQuestion() {
-    setState(() { // setState is use to call build method again for the widget where it is called
+// Difference between MyAppState and _MyAppState is that the latter cannot be accessed from another file and it's property cannot be accessed or mutated from other files and this class becomes private whereas classes name with no underscore is public and is accessible from any file.
+// Class Name/ Properties/ Methods name with underscore 
+class _MyAppState extends State<MyApp> {
+  var _questionIndex = 0; // Called properties
+  void _answerQuestion() {
+    setState(() {
+      // setState is use to call build method again for the widget where it is called
       // To re render the state when onPressed is called hence to change the state
-      if (questionIndex < 1) {
-        questionIndex++;
+      if (_questionIndex < 1) {
+        _questionIndex++;
       }
     });
-    print(questionIndex);
+    print(_questionIndex);
   }
 
   @override
@@ -48,16 +46,16 @@ class MyAppState extends State<MyApp> {
           children: [
             Text(
               // questions.elementAt(0),
-              questions[questionIndex],
+              questions[_questionIndex],
             ),
             RaisedButton(
                 child: Text('Answer 1'),
-                onPressed: answerQuestion), // onPressed takes a function
+                onPressed: _answerQuestion), // onPressed takes a function
             RaisedButton(
                 child: Text('Answer 2'),
                 onPressed:
-                    answerQuestion), // onPressed takes a function name and it should be without parenthesis
-            RaisedButton(child: Text('Answer 3'), onPressed: answerQuestion),
+                    _answerQuestion), // onPressed takes a function name and it should be without parenthesis
+            RaisedButton(child: Text('Answer 3'), onPressed: _answerQuestion),
           ],
         ),
       ),
