@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './question.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatefulWidget {
 // First of all, state is a generic type so we should add angled brackets there and in between, we add a pointer
 // at our class here,
 // Difference between MyAppState and _MyAppState is that the latter cannot be accessed from another file and it's property cannot be accessed or mutated from other files and this class becomes private whereas classes name with no underscore is public and is accessible from any file.
-// Class Name/ Properties/ Methods name with underscore 
+// Class Name/ Properties/ Methods name with underscore
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0; // Called properties
   void _answerQuestion() {
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Text(
+            Question(
               // questions.elementAt(0),
               questions[_questionIndex],
             ),
