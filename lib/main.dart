@@ -4,16 +4,32 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  /*
-  We can add a new function outside of the class, that's a bad idea. Your object, so your classes, should always work standalone, so everything that belongs to a widget should go into the same class, all the data a widget uses and so on should belong into the same class so that
-the widget is a standalone unit. So we can add a function here into our class,
-you can do that because you can add functions to classes, they are then called methods but it's a normal
-function.
-   */
-  var questionIndex = 0;  // We are declaring variable outside the build method because the build method is called multiple times which will reinitialize the variable. Hence we make a class scope variable.
+class MyApp extends StatefulWidget {
+// So we learned about stateful widgets, the other type of widget you can create in Flutter which differs
+// from the stateless widget in that it can manage internal data.
+// Well you could do that in a stateless widget too, you can do that in any Dart class after all
+// but in a stateful widget if you manage that internal data actually in a state object then which is connected
+// to the stateful widget, you can update this in a way that it's picked up by Flutter and that UI also
+// updates.
+  @override
+  State<StatefulWidget> createState() {
+    // createState returns State Object
+    // TODO: implement createState
+    return MyAppState();
+  }
+}
+// State widget cannot be re-built
+// First of all, state is a generic type so we should add angled brackets there and in between, we add a pointer
+// at our class here,
+class MyAppState extends State<MyApp> {
+  var questionIndex = 0;
   void answerQuestion() {
-    questionIndex++;
+    setState(() { // setState is use to call build method again for the widget where it is called
+      // To re render the state when onPressed is called hence to change the state
+      if (questionIndex < 1) {
+        questionIndex++;
+      }
+    });
     print(questionIndex);
   }
 
@@ -28,10 +44,7 @@ function.
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        //   body: Text(
-        //       'This is my default text'), // body widget which is the body of the screen takes only one widget at a time and what if we want to add more widgets like buttons and so on we should use invisible, a layout widgets like Column or row widget.
         body: Column(
-          // render widget in a column. If we wanted items next to each other, we would have used a Row() widget. Coloumn has children named widget which actually takes a list of widgets.
           children: [
             Text(
               // questions.elementAt(0),
@@ -45,20 +58,6 @@ function.
                 onPressed:
                     answerQuestion), // onPressed takes a function name and it should be without parenthesis
             RaisedButton(child: Text('Answer 3'), onPressed: answerQuestion),
-            // RaisedButton(
-            //     child: Text('Answer 4'),
-            //     onPressed: () => print('Answer 4 chosen')),
-            // RaisedButton(
-            //     child: Text('Answer 5'),
-            //     onPressed: () {
-            //       // ...
-            //       print('Answer 5 chosen');
-            //     }),
-            /* By adding parentheses, this gets executed as soon as Dart encounters this, not when the user presses the button but when Dart goes over that code to set up the RaisedButton. So it executes answerQuestion and now it expects to get back the value which should be passed to the RaisedButton as a value for onPressed but onPressed wants a function, answerQuestion on the
-              other hand doesn't return anything because this is a function that doesn't return anything and since we now pass the returned value to onPressed, we return nothing to onPressed but onPressed wants a
-              function. So we're not passing this function here to onPressed but the return value of this function
-              because by adding parentheses, this gets executed when Dart tries to build that button. Of course, this is not what we want. We want to execute
-              answerQuestion when the user presses the button, that's why we want to pass a pointer at answerQuestion to onPressed.*/
           ],
         ),
       ),
