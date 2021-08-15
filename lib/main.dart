@@ -24,19 +24,36 @@ class _MyAppState extends State<MyApp> {
   final _questions = const [
     {
       'questionText': 'What\'s your favourite color?',
-      'answers': ['Black', 'Red', 'Green', 'White'],
+      'answers': [
+        {'text': 'Black', 'score': 10},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 3},
+        {'text': 'White', 'score': 1}
+      ],
     },
     {
       'questionText': 'What\'s your favourite animal?',
-      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion'],
+      'answers': [
+        {'text': 'Rabbit', 'score': 10},
+        {'text': 'Snake', 'score': 1},
+        {'text': 'Elephant', 'score': 9},
+        {'text': 'Lion', 'score': 5}
+      ],
     },
     {
       'questionText': 'Who\'s your favourite cricketer?',
-      'answers': ['Sachin', 'Virat', 'Rohit', 'Dhoni'],
+      'answers': [
+        {'text': 'Sachin', 'score': 10},
+        {'text': 'Virat', 'score': 9},
+        {'text': 'Rohit', 'score': 9},
+        {'text': 'Dhoni', 'score': 10}
+      ],
     },
   ];
   var _questionIndex = 0; // Called properties
-  void _answerQuestion() {
+  var _totalScore = 0;
+  void _answerQuestion(int score) {
+    _totalScore += score;
     setState(() {
       // setState is use to call build method again for the widget where it is called
       // To re render the state when onPressed is called hence to change the state
@@ -45,6 +62,13 @@ class _MyAppState extends State<MyApp> {
       }
     });
     print(_questionIndex);
+  }
+
+  void resetQuiz() {
+    setState(() {
+      _questionIndex = 0;
+      _totalScore = 0;
+    });
   }
 
   @override
@@ -60,7 +84,7 @@ class _MyAppState extends State<MyApp> {
                 questions: _questions,
                 questionIndex: _questionIndex,
               )
-            : Result(),
+            : Result(_totalScore, resetQuiz),
       ),
     );
   }
