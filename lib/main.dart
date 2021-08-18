@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'transaction.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,25 +15,34 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
+  // This below variable transactions will hold a list of Transaction type
+  final List<Transaction> transactions = [
+    // In this case, Transaction itself is not a widget. It's a normal class/ object. It's not extending StatelessWidget/ StatefulWidget
+    Transaction(
+      id: 't1',
+      title: 'New Shoes',
+      amount: 69.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: 't2',
+      title: 'Weekly Groceries',
+      amount: 16.53,
+      date: DateTime.now(),
+    ),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Flutter App'),
         ),
+        // Columns are there to take two or more widget and position them above each other now matter how much vertical space is there and items/widgets next to each other means Row. styling in Flutter works entirely through the arguments you pass to your widgets. and if a certain widget doesn't take a certain argument, if you can't give a column a background color for example, indeed you can't, then you always have to use another widget and wrap the widget which you want to style with it.
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment:
+              CrossAxisAlignment.stretch, // It starts from the end
           children: [
-            // Card by defaut assumes the size of its child unless unless you have a parent or a card like container, which has its own clearly defined width. This also means that column doesn't seem to be such a parent and indeed column is a widget which only takes as much width as its children need. So if we want to change the size of that card here, then we need to change the size of child. Now text on the other hand is a widget which by default only takes as much space as this text needs and if you want to change the size of text, you need to change the size of its parent. So what can we do here since this card depends on the child and this text depends on the parent? We have a dependency which is kind of hard to break, right, There are two ways of breaking that one is that we wrap that text with a widget where we can set a size and we can do it with the refactoring shortcut which you can find in the key bindings in case you forgot it and there we can wrap the text with a container because container is the most universal styling positioning sizing widget you have. With a container, you can control almost anything when it comes to how something is sized or how something is aligned and styled, at least if we talk about things like background colors and so on and therefore, once I wrap the text with a container, we can use the fact that on the container we can set a width and we could set this to 100 and this means the container will now have the width of 100 device pixels which is a unit that always gives us the same size even on differently sized phones or devices.
-            // One Way:
-            // Card(
-            //   child: Container(
-            //     color: Colors.blue,
-            //     width: double.infinity,
-            //     child: Text('Chart!'),
-            //   ),
-            //   elevation: 5,
-            // ),
-            // Another Way:
             Container(
               width: double.infinity,
               child: Card(
@@ -40,8 +51,52 @@ class MyHomePage extends StatelessWidget {
                 elevation: 5,
               ),
             ),
-            Card(
-              child: Text('List of TX'),
+            Column(
+              children: transactions.map((tx) {
+                return Card(
+                  child: Row(
+                    children: [
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.purple, width: 2),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          '\$${tx.amount}', // String interpolation
+                          // tx.amount.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.purple,
+                          ),
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .start, // To make the iem to the left as in case of Column we will use crossAxisAlignment to give position in horizontal direction
+                        children: [
+                          Text(
+                            tx.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              // color: Colors.purple,
+                            ),
+                          ),
+                          Text(
+                            // DateFormat('yyyy/MM/dd').format(tx.date),
+                            // DateFormat('yyyy-MM-dd').format(tx.date),
+                            DateFormat.yMMMd().format(tx.date),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             )
           ],
         ));
