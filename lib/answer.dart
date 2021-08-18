@@ -12,9 +12,11 @@ class Answer extends StatelessWidget {
       width: double
           .infinity, // We have kept the Container widget to control the width
 
-      child: RaisedButton(
-        color: Colors.blue,
-        textColor: Colors.white,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.orange,
+          onPrimary: Colors.white,
+        ),
         child: Text(answerText),
         onPressed: selectHandler,
       ),
