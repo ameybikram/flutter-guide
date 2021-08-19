@@ -9,6 +9,15 @@ class NewTransaction extends StatelessWidget {
 
   NewTransaction(this.addTx);
 
+  void submitData() {
+    final enteredTitle = titleController.text;
+    final enteredAmount = double.parse(amountController.text);
+    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+      return;
+    }
+    addTx(enteredTitle, enteredAmount);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,31 +29,28 @@ class NewTransaction extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextField(
+              // TextField() is used for user input and Text() is used to output text
               decoration: InputDecoration(
                 labelText: 'Title',
               ),
               // Flutter automatically connects the controller with our text fields and these controllers in the end listen to the user input and save the user input
               controller: titleController,
-              // onChanged: (val) {
-              //   titleInput = val;
-              // },
+              onSubmitted: (_) => submitData(),
             ),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Amount',
               ),
               controller: amountController,
-              // onChanged: (val) {
-              //   amountInput = val;
-              // }, // onChaned is fired with every keystroke
+              // To open numbers in keyboard so that users can only add numbers in the amount field
+              keyboardType: TextInputType.number,
+              // onSubmitted is used for submit the data when user clicks on tick icon of keyboard
+              onSubmitted: (_) =>
+                  submitData(), // Parameter _ is a convention to show that we will not use the paramter
             ),
             FlatButton(
               child: Text('Add Trasaction'),
-              onPressed: () {
-                addTx(
-                    titleController.text, 
-                    double.parse(amountController.text));
-              },
+              onPressed: submitData,
               textColor: Colors.purple,
             ),
           ],
